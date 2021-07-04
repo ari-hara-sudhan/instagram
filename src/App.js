@@ -38,10 +38,24 @@ const [openSignup, setOpenSignup] = useState(false);
 const[name,setName]=useState()
 const[email,setEmail]=useState()
 const[password,setPassword]=useState();
+const [user,setUser]=useState(null);
 
 
 
-
+useEffect(()=>{
+  const unsubcribe=auth.onAuthStateChanged((authUser)=>{
+    if(authUser){
+      setUser(authUser);
+      console.log(authUser)
+    }
+    else{
+      setUser(null)
+    }
+  })
+  return()=>{
+    unsubcribe();
+  }
+},[user,name])
 const handleOpen = () => {
   setOpen(true);
 };
@@ -58,11 +72,17 @@ const handleCloseSignup = () => {
 };
 const signin=(e)=>{
   e.preventDefault();
+
   handleCloseSignup();
 }
 const signup=(e)=>{
   e.preventDefault();
   auth.createUserWithEmailAndPassword(email,password)
+  .then((authUser)=>{
+    authUser.user.updateProfile({
+      displayName:name
+    })
+  })
   .catch((error)=>alert(error.message));
   handleClose();
 }
@@ -128,8 +148,18 @@ useEffect(()=>{
       <div className="app__header">
         <img className="app__image" src="https://th.bing.com/th/id/OIP.2Rd4eGdhT8Va58AxkrKXQAHaHa?pid=ImgDet&rs=1" alt="instagram-logo" />
         <div className="app__button">
-          <Button onClick={()=>handleOpen()}>Signup</Button>
-          <Button onClick={()=>handleOpenSignup()} >SignIn</Button>
+          {user? (
+            <Button>SignOut</Button>
+
+          ):(
+            <>
+            <Button onClick={()=>handleOpen()}>Signup</Button>
+            <Button onClick={()=>handleOpenSignup()} >SignIn</Button>
+            </>
+          )
+        
+        }
+         
         </div>
 
       </div>
