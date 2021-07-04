@@ -30,3 +30,17 @@
 .post__info{
     padding:20px;
 }
+.post__form{
+    display:flex;
+    align-items:center;
+    border-top:1px solid lightgray;
+}
+.post__form>input{
+    flex:1;
+    padding:10px;
+    border:none;
+    outline:none;
+}
+.post__container{
+    padding:20px;
+}

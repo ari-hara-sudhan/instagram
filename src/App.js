@@ -46,7 +46,6 @@ useEffect(()=>{
   const unsubcribe=auth.onAuthStateChanged((authUser)=>{
     if(authUser){
       setUser(authUser);
-      console.log(authUser)
     }
     else{
       setUser(null)
@@ -93,7 +92,7 @@ const signup=(e)=>{
 }
 useEffect(()=>{
   db.collection("posts").onSnapshot(snapshot=>{
-    setPosts(snapshot.docs.map(doc=>doc.data()))
+    setPosts(snapshot.docs.map(doc=>({id:doc.id,post:doc.data()})))
   })
 
 },[])
@@ -173,8 +172,8 @@ useEffect(()=>{
    
      
       {
-        posts.map(post=>(
-          <Post username={post.username} comment={post.caption} imageUrl={post.imageUrl} />
+        posts.map(({post,id})=>(
+          <Post postId={id} username={post.username} comment={post.caption} imageUrl={post.imageUrl} />
         ))
       }
          {
