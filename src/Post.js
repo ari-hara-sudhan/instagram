@@ -6,10 +6,10 @@ function Post({username,comment,imageUrl}) {
         <div className="post">
             <div className="post__header">
             <Avatar/>
-            <h3>{username}</h3>
+            <h3 className="post__user">{username}</h3>
             </div>
             <img className="post__image" src= {imageUrl} alt="insta-logo"/>
-            <p className="post__info"><strong>{username}</strong>{comment}</p>
+            <p className="post__info"><strong className="post__content">{username}</strong>{comment}</p>
             
         </div>
     )
