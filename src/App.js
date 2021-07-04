@@ -5,7 +5,7 @@ import Post from './Post'
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
-
+import ImageUpload from './ImageUpload';
 
 function getModalStyle() {
   const top = 50;
@@ -73,6 +73,8 @@ const handleCloseSignup = () => {
 const signin=(e)=>{
   e.preventDefault();
 
+  auth.signInWithEmailAndPassword(email,password)
+  .catch((error)=>alert(error.message))
   handleCloseSignup();
 }
 const signup=(e)=>{
@@ -84,6 +86,9 @@ const signup=(e)=>{
     })
   })
   .catch((error)=>alert(error.message));
+  setName("");
+  setEmail("");
+  setPassword("");
   handleClose();
 }
 useEffect(()=>{
@@ -147,9 +152,10 @@ useEffect(()=>{
       </Modal>
       <div className="app__header">
         <img className="app__image" src="https://th.bing.com/th/id/OIP.2Rd4eGdhT8Va58AxkrKXQAHaHa?pid=ImgDet&rs=1" alt="instagram-logo" />
+      
         <div className="app__button">
           {user? (
-            <Button>SignOut</Button>
+            <Button onClick={()=>auth.signOut()} >LogOut</Button>
 
           ):(
             <>
@@ -161,12 +167,22 @@ useEffect(()=>{
         }
          
         </div>
+      
 
       </div>
+   
+     
       {
         posts.map(post=>(
-          <Post username={post.username} comment={post.comment} imageUrl={post.url} />
+          <Post username={post.username} comment={post.caption} imageUrl={post.imageUrl} />
         ))
+      }
+         {
+        user?.displayName?(
+          <ImageUpload username={user.displayName}/>
+        ):(
+          <p>Sorry u need to LoginIn</p>
+        )
       }
     </div>
   )
