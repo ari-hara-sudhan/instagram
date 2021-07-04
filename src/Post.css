@@ -44,3 +44,13 @@
 .post__container{
     padding:20px;
 }
+.comment__name{
+    color:gray;
+    font-weight:700;
+    margin-right:10px;
+    cursor:pointer;
+}
+.post__delete:hover{
+    color:red;
+
+}

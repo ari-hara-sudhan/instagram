@@ -75,6 +75,8 @@ const signin=(e)=>{
   auth.signInWithEmailAndPassword(email,password)
   .catch((error)=>alert(error.message))
   handleCloseSignup();
+  setEmail("");
+  setPassword("");
 }
 const signup=(e)=>{
   e.preventDefault();
@@ -91,7 +93,7 @@ const signup=(e)=>{
   handleClose();
 }
 useEffect(()=>{
-  db.collection("posts").onSnapshot(snapshot=>{
+  db.collection("posts").orderBy("timestamp","desc").onSnapshot(snapshot=>{
     setPosts(snapshot.docs.map(doc=>({id:doc.id,post:doc.data()})))
   })
 
@@ -173,11 +175,11 @@ useEffect(()=>{
      
       {
         posts.map(({post,id})=>(
-          <Post postId={id} username={post.username} comment={post.caption} imageUrl={post.imageUrl} />
+          <Post user={user} postId={id} username={post.username} comment={post.caption} imageUrl={post.imageUrl} />
         ))
       }
          {
-        user?.displayName?(
+        user?(
           <ImageUpload username={user.displayName}/>
         ):(
           <p>Sorry u need to LoginIn</p>

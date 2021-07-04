@@ -3,12 +3,21 @@ import "./Post.css"
 import { Avatar } from '@material-ui/core';
 import db from './firebase';
 import { Button } from '@material-ui/core';
-function Post({username,comment,imageUrl,postId}) {
+import firebase from "firebase"
+import BackspaceIcon from '@material-ui/icons/Backspace';
+function Post({username,comment,imageUrl,postId,user}) {
     const [comments,setComments]=useState([]);
     const [input,setInput]=useState();
 
     const post=(e)=>{
-    
+        e.preventDefault()
+       db.collection("posts").doc(postId).collection("comments")
+       .add({
+           text:input,
+           username:user.displayName,
+           timestamp:firebase.firestore.FieldValue.serverTimestamp()
+       })
+       setInput("");
 
     }
     useEffect(()=>{
@@ -17,6 +26,7 @@ function Post({username,comment,imageUrl,postId}) {
             unsubcribe=db.collection("posts")
             .doc(postId)
             .collection("comments")
+            .orderBy("timestamp","desc")
             .onSnapshot(snapshot=>{
                 setComments(snapshot.docs.map(doc=>doc.data()))
             });
@@ -35,10 +45,11 @@ function Post({username,comment,imageUrl,postId}) {
             </div>
             <img className="post__image" src= {imageUrl} alt="insta-logo"/>
             <p className="post__info"><strong className="post__content">{username}</strong>{comment}</p>
+            {username === user?.displayName && <BackspaceIcon className="post__delete" onClick={e=>db.collection("posts").doc(postId).delete()}/>}
             <div className="post__container" >
          {
              comments.map(comment=>(
-                 <p>{comment.text} {comment.username}</p>
+                 <p><strong className="comment__name">{comment.username} </strong>{comment.text}</p>
     ))
          }
 
