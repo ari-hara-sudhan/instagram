@@ -56,7 +56,7 @@ const [input,setInput]=useState()
             <progress value={progress} max="100"/>
             <input type="text" placeholder="Enter the Caption" value={input} onChange={e=>setInput(e.target.value)} />
             <input type="file" onChange={handleChange}/>
-            <Button onClick={Upload}>Submit</Button>
+            <Button  disabled={! image} onClick={Upload}>Submit</Button>
             
         </div>
     )
